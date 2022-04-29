@@ -1,5 +1,5 @@
 let body = document.getElementsByTagName('body')
-// document.body.style.backgroundImage = "images/mountains.jpg";
+
 //set all of my id variables
 const container = document.getElementById('container')
 const dateElement = document.getElementById('date');
@@ -13,20 +13,15 @@ const futureForecastElement = document.getElementById('weather-forecast-item');
 
 
 // create Container
-    const currentInfo = document.createElement('div')
+    const currentInfo = document.getElementById('current-info')
     currentInfo.classList.add('current-info')
     container.appendChild(currentInfo)
 
-    const currentContainer = document.createElement('div')
+    const currentContainer = document.getElementById('current-container')
     currentContainer.classList.add('current-container')
     currentInfo.appendChild(currentContainer)
 
-    // const mapContainer = document.createElement('div')
-    // mapContainer.classList.add('map-container')
-    // mapContainer.id = 'map-container'
-    // currentInfo.appendChild(mapContainer)
-
-    const dateContainer = document.createElement('div')
+    const dateContainer = document.getElementById('date-container')
     dateContainer.classList.add('date-container')
     currentInfo.appendChild(dateContainer)
 
@@ -36,11 +31,6 @@ const futureForecastElement = document.getElementById('weather-forecast-item');
     timeContainer.textContent = '12:30'
     dateContainer.appendChild(timeContainer)
 
-    // const amPm = document.createElement('span')
-    // amPm.id = 'am-pm'
-    // amPm.textContent = 'PM'
-    // dateContainer.appendChild(amPm)
-    
     const date = document.createElement('div')
     date.classList.add('date')
     date.id = 'date'
@@ -65,10 +55,8 @@ const futureForecastElement = document.getElementById('weather-forecast-item');
 
     let todayImg = document.createElement('img')
     todayImg.classList.add('w-icon')
-    // todayImg.src = "http://openweathermap.org/img/wn/10d@4x.png"
     todayImg.alt = "weather icon" 
     todayImg.id = 'w-icon'
-    
     other.appendChild(todayImg)
 
     const currentDesc = document.createElement('div')
@@ -84,7 +72,9 @@ const futureForecastElement = document.getElementById('weather-forecast-item');
     const placeContainer = document.getElementById('place-container')
     placeContainer.style.visibility = 'hidden';
     const futureForecast = document.getElementById('future-forecast')
-    
+    const welcomeContainer = document.getElementById('welcome-container')
+    welcomeContainer.innerHTML = 'testing'
+    welcomeContainer.style.visibility = 'hidden';
     const timeZone = document.createElement('div')
     timeZone.classList.add('time-zone')
     timeZone.id = 'time-zone'
@@ -103,38 +93,31 @@ const futureForecastElement = document.getElementById('weather-forecast-item');
     futureForecast.appendChild(weatherForecast)
 
 createWeatherItems()
+//set time using Moment.js
 let now = moment().format('h:mm a')
 timeContainer.innerHTML = now
-// amPm.textContent = moment().format('H:mm a')
-// setInterval(() => {
-//     const time = new Date();
-//     const month = time.getMonth();
-//     const date = time.getDate();
-//     const day = time.getDay();
-//     const hour = time.getHours();
-//     const hoursIn12HrFormat = hour >= 13 ? hour %12: hour
-//     const minutes = time.getMinutes();
-//     const ampm = hour >=12 ? 'PM' : 'AM'
-//     timeContainer.innerHTML = (hoursIn12HrFormat < 10? hoursIn12HrFormat : hoursIn12HrFormat) + ':' + (minutes < 10? '0'+minutes: minutes)+ ' ' + `<span id="am-pm">${ampm}</span>`
-//     // console.log(hoursIn12HrFormat)
-// }, 1000);
 
-//search by zip code
+
+//search by city
 let searchBox = document.getElementById('search-bar');
 let searchBtn = document.getElementById('submit');
+let locationName = ''
 const API_Key = '705b7e2bf903340ad3d67654088d5536';
 
+//Get geo code for location, then pass data to the getWeather function
 function getGeo(){
     $.get('http://api.openweathermap.org/geo/1.0/direct?q=' + searchBox.value + ',US&limit=5&appid=' + API_Key, (data) => {
-        console.log(data[0])
+        
         searchBox.value = ''
         getWeather(data)
+        locationName = data[0].name + ', ' + data[0].state 
         // getMap(data)
-        
+        console.log(data[0], location)
         })
 
 }
 
+//Get weather from openweather API using the longitude and latitude from getGeo function. Then pass that data to the showWeatherData function
 function getWeather(data){
     $.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + data[0].lat + '&lon=' + data[0].lon + '&exclude=hourly,minutely&units=imperial&appid=' + API_Key, (wData) => {
     //    console.log(wData)
@@ -142,16 +125,7 @@ function getWeather(data){
 
         })
 }
-// getMap()
-// function getMap(data){
-//     $.get('https://tile.openweathermap.org/map/temp_new/13/32/97.png?appid=' + API_Key, (map) => {
-//         console.log(map)
-//         // searchBox.value = ''
-//         mapContainer.src = map
-        
-//         })
 
-// }
 
 //create weather item containers
 function createWeatherItems(){
@@ -179,7 +153,6 @@ let sunset = document.getElementById('item-name5')
 let Temp = document.getElementById('current-temperature')
 let nameOfDay = document.getElementById('current-day')
 let description = document.getElementById('current-desc')
-let map =document.getElementById('map-container')
 humidity.textContent = 'Humidity'
 pressure.textContent = 'Pressure'
 windSpeed.textContent = 'Wind Speed'
@@ -188,8 +161,7 @@ sunset.textContent = 'Sunset'
 nameOfDay.textContent = 'Today'
 Temp.innerHTML = '105°'
 description.innerHTML = 'Sunny'
-// map.innerHTML = 'https://tile.openweathermap.org/map/temp_new/13/32/97.png?appid=' + API_Key
-document. body.style.backgroundImage = "url('images/los-angeles.jpg')";
+document. body.style.backgroundImage = "url('images/Weatherbk7.png')";
 
 
 
@@ -233,10 +205,9 @@ function createForecastItems(days){
         }
         
 }
-// showWeatherData()
-function showWeatherData (wData){
-    // let {humidity, pressure, sunrise, sunset, wind_speed} = wData.current;
-// console.log(wData)
+
+function showWeatherData (wData, location){
+    
     timeZone.innerHTML = wData.timezone;
     country.innerHTML = wData.lat + '°N ' + wData.lon+'°E'
     
@@ -248,27 +219,31 @@ function showWeatherData (wData){
     let vTemp = document.getElementById('current-temperature')
     let vnameOfDay = document.getElementById('current-day')
     let vImg = document.getElementById('w-icon')
-    // let vMovie = document.getElementById('myVideo')
+    let welcome = document.getElementById('welcome-container')
+   
     let vdescription = document.getElementById('current-desc')
     vhumidity.innerHTML = wData.current.humidity
     vpressure.textContent = wData.current.pressure + ' Hg'
     vwindSpeed.textContent = wData.current.wind_speed + ' mph'
-    vTemp.innerHTML = Math.round(wData.current.temp) + '°'
+    vTemp.innerHTML = Math.round(wData.current.temp) + '°F'
     vImg.src = 'http://openweathermap.org/img/wn//'+ wData.daily[0].weather[0].icon + '@4x.png'
     vnameOfDay.innerHTML = window.moment(wData.daily[0].dt * 1000).format('dddd')
     vsunrise.textContent = window.moment(wData.current.sunrise * 1000).format('H:mm a')
     vsunset.textContent = window.moment(wData.current.sunset * 1000).format('H:mm a')
-    // vMovie.src = "images/Rain.mp4"; 
+    
     vdescription.innerHTML = wData.current.weather[0].description.toUpperCase() 
     others.style.visibility = 'visible';
     placeContainer.style.visibility = 'visible';
+    welcomeContainer.style.visibility = 'visible';
     let bkImage = 'images/' + wData.current.weather[0].main + '.jpg'
     document. body.style.backgroundImage = 'url('+ bkImage +')';
-    console.log(wData, vdescription)
+    welcome.innerHTML = locationName
+    console.log(wData, locationName)
     
     
     
       let week = wData.daily.length
+
       createForecastItems(week)
          
         for (let i = 0; i < wData.daily.length; i++){
@@ -279,8 +254,8 @@ function showWeatherData (wData){
             let tempDesc = document.getElementById('fore-desc' +[i])
             otherDayImg.src = 'http://openweathermap.org/img/wn//'+ wData.daily[i].weather[0].icon + '@2x.png'
             
-            tempHi.innerHTML = 'High: ' + Math.round(wData.daily[i].temp.max) + '°'
-            tempLow.innerHTML = 'Low: ' + Math.round(wData.daily[i].temp.min) + '°'
+            tempHi.innerHTML = 'High: ' + Math.round(wData.daily[i].temp.max) + '°F'
+            tempLow.innerHTML = 'Low: ' + Math.round(wData.daily[i].temp.min) + '°F'
             dayName.innerHTML = window.moment(wData.daily[i].dt * 1000).format('dddd')
             tempDesc.innerHTML = wData.daily[i].weather[0].description.toUpperCase()
         }
@@ -288,8 +263,3 @@ function showWeatherData (wData){
 }
     
 searchBtn.addEventListener('click', getGeo);
-// console.log(time)
-// let t ='http://api.openweathermap.org/geo/1.0/direct?q=' + searchBox.value + '&limit={limit}&appid=' + API_Key
-// console.log(t)
-// createContainer()
-// console.log(weatherForecastElement.weatherForecastItems.id)

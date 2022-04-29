@@ -6,22 +6,40 @@
     padding:0;
 }
 
-/* Style the video: 100% width and height to cover the entire window */
-#myVideo {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  overflow: hidden;
+#map {
+    display: flex;
+    flex-direction: column;
+    background: rgba(24,24,27, 0.6);
+    padding:20px;
+    border-radius: 10px;
+    margin: 200px 0px;
+    border: 1px solid #eee;
+    height: 700px;
+    width: 700px;
+}
+
+.welcome-container {
+    padding: 0px 70px;
+    color:#fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(94, 94, 99, 0.6);
+    border-radius: 10px;
+    height: 45px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: 100;
 }
 body{
-    background:url('https://cdn.pixabay.com/photo/2021/11/21/21/14/mountain-6815304_960_720.jpg');
+    /* background:url('https://cdn.pixabay.com/photo/2021/11/21/21/14/mountain-6815304_960_720.jpg'); */
     background-repeat: no-repeat;
     background-size:cover;
     overflow:hidden;
     height: 100vh;
     font-family: 'Poppins', sans-serif;
+    background-repeat: no-repeat;
+   background-position: center center;
 }
 .header {
     padding: 0px 10px;
@@ -52,8 +70,8 @@ body{
     font-size: large;
 }
 .header .header-title{
-    font-size: 20px;
-    font-weight: 100;
+    font-size: 30px;
+    font-weight: 450;
     text-align: right;
     width: 500px;
 }
@@ -67,18 +85,20 @@ body{
 }
 
 .current-info{
-    display: flex;
+    display:flex;
     justify-content:space-between;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
     font-weight: 100;
+    align-content: space-between;
     
 }
 .current-container{
     font-weight: 100;
+    justify-self: unset;
     
 }
 .current-info .time{
-    font-size: 70px;
+    font-size: 100px;
     
 }
 
@@ -88,7 +108,7 @@ body{
 }
 
 .current-info .date{
-    font-size: 30px;
+    font-size: 50px;
     
 }
 
