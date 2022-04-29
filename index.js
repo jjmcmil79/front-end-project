@@ -106,7 +106,7 @@ const API_Key = '705b7e2bf903340ad3d67654088d5536';
 
 //Get geo code for location, then pass data to the getWeather function
 function getGeo(){
-    $.get('http://api.openweathermap.org/geo/1.0/direct?q=' + searchBox.value + ',US&limit=5&appid=' + API_Key, (data) => {
+    $.get('https://api.openweathermap.org/geo/1.0/direct?q=' + searchBox.value + ',US&limit=5&appid=' + API_Key, (data) => {
         
         searchBox.value = ''
         getWeather(data)
@@ -226,7 +226,7 @@ function showWeatherData (wData, location){
     vpressure.textContent = wData.current.pressure + ' Hg'
     vwindSpeed.textContent = wData.current.wind_speed + ' mph'
     vTemp.innerHTML = Math.round(wData.current.temp) + '°F'
-    vImg.src = 'http://openweathermap.org/img/wn//'+ wData.daily[0].weather[0].icon + '@4x.png'
+    vImg.src = 'https://openweathermap.org/img/wn//'+ wData.daily[0].weather[0].icon + '@4x.png'
     vnameOfDay.innerHTML = window.moment(wData.daily[0].dt * 1000).format('dddd')
     vsunrise.textContent = window.moment(wData.current.sunrise * 1000).format('H:mm a')
     vsunset.textContent = window.moment(wData.current.sunset * 1000).format('H:mm a')
@@ -252,7 +252,7 @@ function showWeatherData (wData, location){
             let tempHi = document.getElementById('hi-temp' +[i])
             let tempLow = document.getElementById('low-temp' +[i])
             let tempDesc = document.getElementById('fore-desc' +[i])
-            otherDayImg.src = 'http://openweathermap.org/img/wn//'+ wData.daily[i].weather[0].icon + '@2x.png'
+            otherDayImg.src = 'https://openweathermap.org/img/wn//'+ wData.daily[i].weather[0].icon + '@2x.png'
             
             tempHi.innerHTML = 'High: ' + Math.round(wData.daily[i].temp.max) + '°F'
             tempLow.innerHTML = 'Low: ' + Math.round(wData.daily[i].temp.min) + '°F'
