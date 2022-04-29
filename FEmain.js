@@ -222,7 +222,7 @@ function showWeatherData (wData, location){
     let welcome = document.getElementById('welcome-container')
    
     let vdescription = document.getElementById('current-desc')
-    vhumidity.innerHTML = wData.current.humidity
+    vhumidity.innerHTML = wData.current.humidity + '%'
     vpressure.textContent = wData.current.pressure + ' Hg'
     vwindSpeed.textContent = wData.current.wind_speed + ' mph'
     vTemp.innerHTML = Math.round(wData.current.temp) + '°F'
