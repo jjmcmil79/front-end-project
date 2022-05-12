@@ -3,9 +3,7 @@ let body = document.getElementsByTagName("body");
 //set all of my id variables
 const container = document.getElementById("container");
 const dateElement = document.getElementById("date");
-const currentWeatherItemsElement = document.getElementById(
-  "current-weather-items"
-);
+const currentWeatherItemsElement = document.getElementById("current-weather-items");
 const timezone = document.getElementById("time-zone");
 const countryElement = document.getElementById("country");
 const weatherForecastElement = document.getElementById("weather-forecast");
@@ -68,7 +66,7 @@ other.appendChild(currentDesc);
 const currentTemp = document.createElement("div");
 currentTemp.classList.add("current-temperature");
 currentTemp.id = "current-temperature";
-other.appendChild(currentTemp);
+others.appendChild(currentTemp);
 
 const placeContainer = document.getElementById("place-container");
 placeContainer.style.visibility = "hidden";
@@ -99,24 +97,37 @@ let now = moment().format("h:mm a");
 timeContainer.innerHTML = now;
 
 //search by city
-let searchBox = document.getElementById("search-bar");
+let searchBoxCity = document.getElementById("search-bar");
+let searchBoxState = document.getElementById("search-bar2");
 let searchBtn = document.getElementById("submit");
 let locationName = "";
 const API_Key = "705b7e2bf903340ad3d67654088d5536";
 
 //Get geo code for location, then pass data to the getWeather function
 function getGeo() {
+  
   $.get(
-    "https://api.openweathermap.org/geo/1.0/direct?q=" + searchBox.value + ",US&limit=5&appid=" + API_Key, (data) => {
+    "https://api.openweathermap.org/geo/1.0/direct?q=" + searchBoxCity.value + ", " + acronymToFullName(searchBoxState.value) + ",US&limit=5&appid=" + API_Key, (data) => {
+      
+      console.log(acronymToFullName(searchBoxState.value))
+      if (searchBoxCity === null || searchBoxState === null) {
         getWeather(data);
         locationName = data[0].name + ", " + data[0].state;
-        searchBox.value = "";
+      }
+      else {
+      console.log(data)
+      getWeather(data);
+            locationName = data[0].name + ", " + data[0].state;
+      }
+        searchBoxCity.value = "";
+        searchBoxState.value = "";
     }
   );
 }
 
 //Get weather from openweather API using the longitude and latitude from getGeo function. Then pass that data to the showWeatherData function
 function getWeather(data) {
+  console.log(data)
   $.get("https://api.openweathermap.org/data/2.5/onecall?lat=" + data[0].lat + "&lon=" + data[0].lon + "&exclude=hourly,minutely&units=imperial&appid=" + API_Key, (wData) => {
       console.log(wData);
       showWeatherData(wData);
@@ -216,7 +227,7 @@ function showWeatherData(wData, location) {
   vImg.src =
     "https://openweathermap.org/img/wn//" +
     wData.daily[0].weather[0].icon +
-    "@4x.png";
+    "@2x.png";
   vnameOfDay.innerHTML = window.moment(wData.daily[0].dt * 1000).format("dddd");
   vsunrise.textContent = window
     .moment(wData.current.sunrise * 1000)
@@ -257,6 +268,72 @@ function showWeatherData(wData, location) {
 }
 
 searchBtn.addEventListener("click", getGeo);
-searchBox.addEventListener("keypress", function (e) {
+searchBoxCity.addEventListener("keypress", function (e) {
   if (e.key === "Enter") getGeo();
 });
+searchBoxState.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") getGeo();
+});
+
+function acronymToFullName(acronym) {
+  data = {
+    AZ: 'Arizona',
+    AL: 'Alabama',
+    AK: 'Alaska',
+    AR: 'Arkansas',
+    CA: 'California',
+    CO: 'Colorado',
+    CT: 'Connecticut',
+    DC: 'District of Columbia',
+    DE: 'Delaware',
+    FL: 'Florida',
+    GA: 'Georgia',
+    HI: 'Hawaii',
+    ID: 'Idaho',
+    IL: 'Illinois',
+    IN: 'Indiana',
+    IA: 'Iowa',
+    KS: 'Kansas',
+    KY: 'Kentucky',
+    LA: 'Louisiana',
+    ME: 'Maine',
+    MD: 'Maryland',
+    MA: 'Massachusetts',
+    MI: 'Michigan',
+    MN: 'Minnesota',
+    MS: 'Mississippi',
+    MO: 'Missouri',
+    MT: 'Montana',
+    NE: 'Nebraska',
+    NV: 'Nevada',
+    NH: 'New Hampshire',
+    NJ: 'New Jersey',
+    NM: 'New Mexico',
+    NY: 'New York',
+    NC: 'North Carolina',
+    ND: 'North Dakota',
+    OH: 'Ohio',
+    OK: 'Oklahoma',
+    OR: 'Oregon',
+    PA: 'Pennsylvania',
+    RI: 'Rhode Island',
+    SC: 'South Carolina',
+    SD: 'South Dakota',
+    TN: 'Tennessee',
+    TX: 'Texas',
+    UT: 'Utah',
+    VT: 'Vermont',
+    VA: 'Virginia',
+    WA: 'Washington',
+    WV: 'West Virginia',
+    WI: 'Wisconsin',
+    WY: 'Wyoming',
+    AS: "American Samoa",
+    GU: "Guam",
+    MP: "Northern Mariana Islands",
+    PR: "Puerto Rico",
+    VI: "U.S. Virgin Islands",
+    UM: "U.S. Minor Outlying Islands",
+  }
+  return data[acronym] ?? acronym
+}
